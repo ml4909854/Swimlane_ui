@@ -1,31 +1,58 @@
+// reducers/blocksReducer.js
 const initialState = {
-    blocks: {
-        1: { id: 1, title: 'Block 1', description: 'Description of Block 1', history: [] },
-        2: { id: 2, title: 'Block 2', description: 'Description of Block 1', history: [] },
-        3: { id: 3, title: 'Block 3', description: 'Description of Block 1', history: [] },
-    },
+  blocks: {},
 };
 
 const blocksReducer = (state = initialState, action) => {
-    switch (action.type) {
-        case 'UPDATE_BLOCK': {
-            const { id, data } = action.payload;
+  switch (action.type) {
+    case 'ADD_BLOCK':
+      return {
+        ...state,
+        blocks: {
+          ...state.blocks,
+          [action.payload.id]: {
+            id: action.payload.id,
+            title: action.payload.title,
+            description: action.payload.description,
+            history: [],  // Initialize history as an empty array
+          },
+        },
+      };
+    case 'HISTORY_BLOCK': {
+      const { id, data } = action.payload;
 
-            return {
-                ...state,
-                blocks: {
-                    ...state.blocks,
-                    [id]: {
-                        ...state.blocks[id],
-                        ...data,
-                        history: [...state.blocks[id].history, data.historyEntry]
-                    },
-                }
-            };
+      return {
+        ...state,
+        blocks: {
+          ...state.blocks,
+          [id]: {
+            ...state.blocks[id],
+            history: [...(state.blocks[id].history || []), data.historyEntry]
+          },
         }
-        default:
-            return state;
+      };
     }
+    case 'UPDATE_BLOCK':
+      return {
+        ...state,
+        blocks: {
+          ...state.blocks,
+          [action.payload.id]: {
+            ...state.blocks[action.payload.id],
+            title: action.payload.title,
+            description: action.payload.description,
+          },
+        },
+      };
+    case 'DELETE_BLOCK':
+      const { [action.payload]: deletedBlock, ...remainingBlocks } = state.blocks;
+      return {
+        ...state,
+        blocks: remainingBlocks,
+      };
+    default:
+      return state;
+  }
 };
 
 export default blocksReducer;

@@ -5,7 +5,7 @@ function App() {
     return (
         <>
             <div style={{ padding: '20px' }}>
-                <h1>Swimlane UI with Drag and Drop Funtionality</h1>
+                <h1><span style={{color:"white"}}>SwimLane UI with </span> <span style={{color:"Red"}}>Drag and Drop Funtionality</span></h1>
                 <Swimlanes />
             </div>
         </>
